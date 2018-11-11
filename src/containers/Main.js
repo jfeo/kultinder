@@ -34,9 +34,9 @@ const SwipeContainer = posed.div({
 class Main extends Component {
   state = {
     img: {
-      asset: '',
-      collection: '',
-      title: ''
+      assetId: '',
+      title: '',
+      thumb: ''
     },
     loading: true,
     newMatch: false
@@ -47,12 +47,13 @@ class Main extends Component {
 
     axios.get(url)
       .then(res => {
-        const { asset, collection, title } = res.data
+        const { assetId, title, thumb } = res.data
+        console.log(assetId, title, thumb)
         this.setState(() => ({
           img: {
-            asset,
-            collection,
-            title
+            assetId,
+            title,
+            thumb
           },
           loading: false
         }))
@@ -61,9 +62,9 @@ class Main extends Component {
   }
 
   onOpinion = (user, choice, updateMatches) => {
-    const { asset, collection } = this.state.img
+    const { assetId, title, thumb } = this.state.img
     const matchUrl = `${API_BASE_URL}/match?user=${user}`
-    const chooseUrl = `${API_BASE_URL}/choose?user=${user}&collection=${collection}&asset=${asset}&choice=${choice}`
+    const chooseUrl = `${API_BASE_URL}/choose?user=${user}&assetId=${assetId}&choice=${choice}`
     const cultureUrl = `${API_BASE_URL}/culture?user=${user}`
 
     this.setState(() => ({ loading: true }))
@@ -79,12 +80,13 @@ class Main extends Component {
             }
             axios.get(cultureUrl)
               .then(res => {
-                const { asset, collection, title } = res.data
+                const { assetId, title, thumb } = res.data
+                console.log(assetId, title, thumb)
                 this.setState(() => ({
                   img: {
-                    asset,
-                    collection,
-                    title
+                    assetId,
+                    title,
+                    thumb
                   }
                 }))
                 setTimeout(() => {
@@ -111,8 +113,7 @@ class Main extends Component {
               onDragEnd={() => console.log(this)}
             >
               <Image
-                asset={img.asset}
-                collection={img.collection}
+                thumb={img.thumb}
                 title={img.title}
                 loading={loading ? true : false}
               />
